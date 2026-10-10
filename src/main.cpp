@@ -1,3 +1,4 @@
+#include "aloha/Graph.h"
 #include "hk/hook/Trampoline.h"
 #include "nn/fs.h"
 #include "global.h"
@@ -145,6 +146,31 @@ HkTrampoline remix20EntryHook = [](TrampolineStatic(), StageRemix20* stage, SeqT
     thread->popUnk270();
 };
 
+HkTrampoline playActionHook = [](TrampolineStatic(), GraphAnime* graphAnime, const char* actionName) -> bool {
+    if (strcmp(actionName, "SetSunnyBG") == 0) {
+        return false;
+    }
+    if (strcmp(actionName, "SetShineBG") == 0) {
+        return false;
+    }
+    if (strcmp(actionName, "SetRainyBG") == 0) {
+        return false;
+    }
+
+    return orig(graphAnime, actionName);
+};
+
+HkTrampoline playActionHook2 = [](TrampolineStatic(), Graph* thisGraph, const char* prName, const char* actionName, bool param4, int propagation) -> int {
+    if (strcmp(actionName, "RainFadeOut") == 0) {
+        return -1;
+    }
+    if (strcmp(actionName, "RainFadeIn") == 0) {
+        return -1;
+    }
+
+    return orig(thisGraph, prName, actionName, param4, propagation);
+};
+
 
 extern "C" void hkMain() {
     //const ptr mainBase = hk::ro::getMainModule()->range().start();
@@ -154,7 +180,10 @@ extern "C" void hkMain() {
     stageFactoryCreateHook.installAtSym<"_ZN12StageFactory6createEjyjjjjj">();
     getTextHook.installAtMainOffset(0x4EFE80);
 
-    remix20EntryHook.installAtMainOffset(0x416220);
+    playActionHook.installAtMainOffset(0x4F8260);
+    playActionHook2.installAtMainOffset(0x4F4610);
+
+    // remix20EntryHook.installAtMainOffset(0x416220);
 
     //getGraphBacteriaHook.installAtMainOffset(0x1434E0);
     //getGraphBrushHook.installAtMainOffset(0x158A00);
