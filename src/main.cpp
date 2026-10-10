@@ -156,6 +156,43 @@ HkTrampoline playActionHook = [](TrampolineStatic(), GraphAnime* graphAnime, con
     if (strcmp(actionName, "SetRainyBG") == 0) {
         return false;
     }
+    if (strcmp(actionName, "SUNRISE") == 0) {
+        return false;
+    }
+    if (strcmp(actionName, "SHOWTIME") == 0) {
+        return false;
+    }
+    if (strcmp(actionName, "ZOOM") == 0) {
+        return false;
+    }
+    if (strcmp(actionName, "BIG2") == 0) {
+        return false;
+    }
+
+    return orig(graphAnime, actionName);
+};
+HkTrampoline otherPlayActionHook = [](TrampolineStatic(), GraphAnime* graphAnime, const char* actionName) -> bool {
+    if (strcmp(actionName, "SetSunnyBG") == 0) {
+        return false;
+    }
+    if (strcmp(actionName, "SetShineBG") == 0) {
+        return false;
+    }
+    if (strcmp(actionName, "SetRainyBG") == 0) {
+        return false;
+    }
+    if (strcmp(actionName, "SUNRISE") == 0) {
+        return false;
+    }
+    if (strcmp(actionName, "SHOWTIME") == 0) {
+        return false;
+    }
+    if (strcmp(actionName, "ZOOM") == 0) {
+        return false;
+    }
+    if (strcmp(actionName, "BIG2") == 0) {
+        return false;
+    }
 
     return orig(graphAnime, actionName);
 };
@@ -181,6 +218,7 @@ extern "C" void hkMain() {
     getTextHook.installAtMainOffset(0x4EFE80);
 
     playActionHook.installAtMainOffset(0x4F8260);
+    otherPlayActionHook.installAtMainOffset(0x4F8210);
     playActionHook2.installAtMainOffset(0x4F4610);
 
     // remix20EntryHook.installAtMainOffset(0x416220);
